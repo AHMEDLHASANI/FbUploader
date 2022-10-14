@@ -75,8 +75,10 @@ class Uploader:
         return desc, title
 
     def download_video(self, video):
+        video.download(filename=f"{self.page}/current_video.mp4"
         try:
-            video.download(filename=f"{self.page}/current_video.mp4")
+	    print("trying")
+            #video.download(filename=f"{self.page}/current_video.mp4")
         except:
             print(f"ERROR (Downloading): While Downloading {video.title}")
             return False
