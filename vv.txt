@@ -1,24 +1,28 @@
-from os import system,getenv,rename
+from os import rename,walk,mkdir,remove
+from subprocess import run,CalledProcessError
 from mediafire_dl import download
 
-class DownloadAndUnrar(mediafire_dl):
+
+class DownloadAndUnrar:
     def __init__(self,url) -> str:
         self.url = url
         download(self.url,"file.rar",quiet=False)
         if self.unrar() :
             self.new_name()
+            print("ALL GOOD ---- [BiratBit1.com]")
     def unrar():
-        system("mkdir DOWNLOADS")
-        system("unrar x file.rar DOWNLOADS/dir -ppackanime.com && export DOWNLOADED=YES")
-        
-        if getenv("DOWNLOADED"):
-            system("rm -rf file.rar")
-            return True
-        else:
+        mkdir("DOWNLOADS")
+        try:
+            run(["unrar","x","file.rar","DOWNLOADS","-ppackanime.com"],check=True)
+            remove("file.rar")
+        except CalledProcessError:
             return False
     def new_name(self):
-        for x,y,files in walk("./DOWNLOADS/Dir"):
+        for x,y,files in walk("DOWNLOADS"):
+            newname = x.repelace("PackAnime.com","BiratBit1.com")
+            rename(x,newname)
             for file in files:
-                newname = file.replace("Packanime.com","BiratBit1.com")
-                rename(file,newname)
+                newname = file.replace("PackAnime.com","BiratBit1.com")
+                rename(x+"/"+file,x+"/"+newname)
+                
 DownloadAndUnrar(input("URL [MEDIA-FIRE]:  "))
